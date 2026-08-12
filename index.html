@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="全国市町村の人口新陳代謝率と年ごとの変化を確認できるデータビューア"
+    />
+    <title>人口新陳代謝率ビューア</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <div class="hero__inner">
+        <p class="eyebrow">Municipality Turnover Explorer</p>
+        <h1>まちの動きを、<br /><span>人口の出入り</span>から見る。</h1>
+        <p class="hero__lead">
+          国内転入・転出が年初人口に占める割合を、全国の市町村ごとに比較できます。
+        </p>
+      </div>
+    </header>
+
+    <main class="app-shell">
+      <section class="control-panel" aria-labelledby="controls-heading">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Explore</p>
+            <h2 id="controls-heading">地域と年を選ぶ</h2>
+          </div>
+          <p id="data-meta" class="data-meta">データを読み込んでいます…</p>
+        </div>
+
+        <div class="controls">
+          <label class="field">
+            <span>都道府県</span>
+            <input
+              id="prefecture-input"
+              type="text"
+              list="prefecture-list"
+              autocomplete="off"
+              placeholder="例：愛知県"
+              aria-describedby="prefecture-error"
+            />
+            <datalist id="prefecture-list"></datalist>
+            <small id="prefecture-error" class="field-error" aria-live="polite"></small>
+          </label>
+
+          <label class="field">
+            <span>表示年</span>
+            <select id="year-select" disabled></select>
+          </label>
+
+          <label class="switch-field">
+            <input id="threshold-toggle" type="checkbox" />
+            <span class="switch" aria-hidden="true"></span>
+            <span>
+              <strong>8%以上のみ</strong>
+              <small>選択年の新陳代謝率で絞り込み</small>
+            </span>
+          </label>
+        </div>
+      </section>
+
+      <section id="status" class="status" aria-live="polite" hidden></section>
+
+      <section class="summary-grid" aria-label="選択地域の概要">
+        <article class="summary-card summary-card--primary">
+          <span>表示市町村</span>
+          <strong id="summary-count">—</strong>
+          <small id="summary-region">—</small>
+        </article>
+        <article class="summary-card">
+          <span>平均新陳代謝率</span>
+          <strong id="summary-average">—</strong>
+          <small>単純平均</small>
+        </article>
+        <article class="summary-card">
+          <span>最も高い市町村</span>
+          <strong id="summary-top-value">—</strong>
+          <small id="summary-top-name">—</small>
+        </article>
+        <article class="summary-card">
+          <span>前年比平均</span>
+          <strong id="summary-change">—</strong>
+          <small id="summary-change-period">—</small>
+        </article>
+      </section>
+
+      <section class="chart-card" aria-labelledby="turnover-heading">
+        <div class="chart-card__heading">
+          <div>
+            <p class="section-kicker">Turnover rate</p>
+            <h2 id="turnover-heading">市町村別 人口新陳代謝率</h2>
+          </div>
+          <p>（国内転入者数＋国内転出者数）÷ 年初人口</p>
+        </div>
+        <div id="turnover-chart" class="chart-scroll" aria-live="polite"></div>
+      </section>
+
+      <section class="chart-card chart-card--change" aria-labelledby="change-heading">
+        <div class="chart-card__heading">
+          <div>
+            <p class="section-kicker">Year-over-year</p>
+            <h2 id="change-heading">前年からの変化率</h2>
+          </div>
+          <p id="change-formula">（当年率 ÷ 前年率 − 1）× 100</p>
+        </div>
+        <div id="change-chart" class="chart-scroll" aria-live="polite"></div>
+      </section>
+
+      <aside id="detail-panel" class="detail-panel" aria-labelledby="detail-heading">
+        <div>
+          <p class="section-kicker">Municipality detail</p>
+          <h2 id="detail-heading">棒を選ぶと詳細を表示します</h2>
+        </div>
+        <dl class="detail-grid">
+          <div><dt>人口</dt><dd id="detail-population">—</dd></div>
+          <div><dt>国内転入</dt><dd id="detail-in">—</dd></div>
+          <div><dt>国内転出</dt><dd id="detail-out">—</dd></div>
+          <div><dt>新陳代謝率</dt><dd id="detail-turnover">—</dd></div>
+          <div><dt>前年比</dt><dd id="detail-change">—</dd></div>
+          <div><dt>前年差</dt><dd id="detail-points">—</dd></div>
+        </dl>
+      </aside>
+    </main>
+
+    <footer>
+      <p>出典：総務省 e-Stat「住民基本台帳に基づく人口、人口動態及び世帯数調査」</p>
+      <p>政令指定都市は市全体、東京都は特別区を市町村相当として収録しています。</p>
+    </footer>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
