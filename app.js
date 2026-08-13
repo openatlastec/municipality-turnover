@@ -9,6 +9,11 @@ const state = {
   prefecture: null,
   year: null,
   thresholdOnly: false,
+  municipalityTypes: {
+    city: true,
+    town: true,
+    village: true,
+  },
   selectedMunicipalityCode: null,
 };
 
@@ -18,6 +23,9 @@ const elements = {
   prefectureError: document.querySelector("#prefecture-error"),
   yearSelect: document.querySelector("#year-select"),
   thresholdToggle: document.querySelector("#threshold-toggle"),
+  cityToggle: document.querySelector("#city-toggle"),
+  townToggle: document.querySelector("#town-toggle"),
+  villageToggle: document.querySelector("#village-toggle"),
   dataMeta: document.querySelector("#data-meta"),
   status: document.querySelector("#status"),
   turnoverChart: document.querySelector("#turnover-chart"),
@@ -71,11 +79,18 @@ function findPrefecture(name) {
   return state.data.prefectures.find((item) => item.name === normalized) || null;
 }
 
+function municipalityType(municipality) {
+  if (municipality.name.endsWith("町")) return "town";
+  if (municipality.name.endsWith("村")) return "village";
+  return "city";
+}
+
 function visibleMunicipalities() {
   if (!state.prefecture || !state.year) return [];
   const yearKey = String(state.year);
   return state.prefecture.municipalities
     .filter((item) => item.metrics[yearKey])
+    .filter((item) => state.municipalityTypes[municipalityType(item)])
     .filter(
       (item) =>
         !state.thresholdOnly || item.metrics[yearKey].turnover_pct >= 8,
@@ -168,7 +183,7 @@ function renderTurnoverChart(municipalities) {
   if (!municipalities.length) {
     const message = document.createElement("p");
     message.className = "empty-state";
-    message.textContent = "条件に該当する市町村がありません。8%以上の絞り込みを解除してください。";
+    message.textContent = "条件に該当する市町村がありません。フィルター条件を変更してください。";
     elements.turnoverChart.append(message);
     return;
   }
@@ -386,6 +401,17 @@ function bindEvents() {
     state.thresholdOnly = elements.thresholdToggle.checked;
     state.selectedMunicipalityCode = null;
     render();
+  });
+  [
+    [elements.cityToggle, "city"],
+    [elements.townToggle, "town"],
+    [elements.villageToggle, "village"],
+  ].forEach(([toggle, type]) => {
+    toggle.addEventListener("change", () => {
+      state.municipalityTypes[type] = toggle.checked;
+      state.selectedMunicipalityCode = null;
+      render();
+    });
   });
 }
 

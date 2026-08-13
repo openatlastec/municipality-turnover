@@ -141,7 +141,7 @@ footer {
 
 .controls {
   display: grid;
-  grid-template-columns: minmax(240px, 1.5fr) minmax(150px, 0.7fr) minmax(240px, 1fr);
+  grid-template-columns: minmax(220px, 1.3fr) minmax(130px, 0.65fr) minmax(220px, 1fr) minmax(200px, 0.9fr);
   gap: 18px;
   margin-top: 28px;
 }
@@ -231,6 +231,67 @@ footer {
 .switch-field small {
   display: block;
   margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.7rem;
+}
+
+.municipality-filter {
+  min-width: 0;
+  margin: 0;
+  padding: 12px 15px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+
+.municipality-filter legend {
+  padding: 0 5px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.municipality-filter__options {
+  display: flex;
+  gap: 8px;
+}
+
+.filter-chip {
+  position: relative;
+  cursor: pointer;
+}
+
+.filter-chip input {
+  position: absolute;
+  opacity: 0;
+}
+
+.filter-chip span {
+  min-width: 52px;
+  min-height: 38px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: white;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 800;
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.filter-chip input:checked + span {
+  border-color: var(--green);
+  background: var(--green);
+  color: white;
+}
+
+.filter-chip input:focus-visible + span {
+  box-shadow: 0 0 0 4px rgba(23, 107, 83, 0.12);
+}
+
+.municipality-filter > small {
+  display: block;
+  margin-top: 7px;
   color: var(--muted);
   font-size: 0.7rem;
 }
